@@ -601,11 +601,6 @@ PYBIND11_MODULE(hyperonpy, m) {
             return atom_is_null(&res) ? nonstd::nullopt : nonstd::optional<CAtom>(CAtom(res));
         }, "Resolve" );
 
-    m.def("bindings_resolve_and_remove", [](CBindings bindings, char const* varName) -> nonstd::optional<CAtom> {
-            auto const res = bindings_resolve_and_remove(bindings.ptr(), varName);
-            return atom_is_null(&res) ? nonstd::nullopt : nonstd::optional<CAtom>(CAtom(res));
-        }, "Resolve and remove" );
-
     m.def("bindings_to_str", [](CBindings bindings) {
         return func_to_string((write_to_buf_func_t)&bindings_to_str, bindings.ptr());
     }, "Convert bindings to human readable string");
@@ -860,6 +855,7 @@ PYBIND11_MODULE(hyperonpy, m) {
     m.def("env_builder_init_common_env", [](EnvBuilder builder) { return env_builder_init_common_env(builder.obj); }, "Finish initialization of the common environment");
     m.def("env_builder_set_working_dir", [](EnvBuilder& builder, std::string path) { env_builder_set_working_dir(builder.ptr(), path.c_str()); }, "Sets the working dir in the environment");
     m.def("env_builder_set_config_dir", [](EnvBuilder& builder, std::string path) { env_builder_set_config_dir(builder.ptr(), path.c_str()); }, "Sets the config dir in the environment");
+    m.def("env_builder_create_config_dir", [](EnvBuilder& builder) { env_builder_create_config_dir(builder.ptr()); }, "Creates the config dir if it doesn't exist");
     m.def("env_builder_disable_config_dir", [](EnvBuilder& builder) { env_builder_disable_config_dir(builder.ptr()); }, "Disables the config dir in the environment");
     m.def("env_builder_set_is_test", [](EnvBuilder& builder, bool is_test) { env_builder_set_is_test(builder.ptr(), is_test); }, "Disables the config dir in the environment");
     m.def("env_builder_add_include_path", [](EnvBuilder& builder, std::string path) { env_builder_add_include_path(builder.ptr(), path.c_str()); }, "Adds an include path to the environment");
